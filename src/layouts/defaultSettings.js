@@ -1,3 +1,4 @@
+// https://procomponents.ant.design/components/layout#settings
 const Settings = {
   navTheme: 'light',
   // 拂晓蓝
@@ -7,7 +8,7 @@ const Settings = {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Ant Design Pro',
+  title: 'DBox Pro',
   pwa: false,
   logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   iconfontUrl: '',

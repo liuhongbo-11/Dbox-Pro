@@ -1,23 +1,28 @@
 export default [
   {
-    exact: true,
+    exact: false,
     path: '/',
-    redirect: '/home',
-  },
-  {
-    exact: true,
-    path: '/home',
-    component: './Home',
-  },
-  {
-    path: '/components',
-    component: './DisplayComponent',
-    // 配置子路由
+    component: '@/layouts/index',
     routes: [
-      { path: '/simple-form', component: './DisplayComponent/SimpleForm' },
+      {
+        exact: true,
+        path: '/home',
+        component: './Home',
+      },
+      {
+        path: '/components',
+        component: './DisplayComponent',
+        // 配置子路由
+        routes: [
+          {
+            path: '/components/simple-form',
+            component: './DisplayComponent/SimpleForm',
+          },
+        ],
+      },
+      {
+        component: './404',
+      },
     ],
-  },
-  {
-    component: './404',
   },
 ];

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, Fragment } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import InlineEdit from '@/components/InlineEdit';
 import { SimpleSearch } from '@/components/SearchForm';
@@ -21,9 +21,7 @@ const DisplayComponent = () => {
 
   const handleReset = () => formRef.current.reset();
   return (
-    <PageContainer style={{ background: '#fff', height: '100vh' }}>
-      <h3>display component</h3>
-      <br />
+    <Fragment>
       <SimpleSearch fields={fields} formRef={formRef} />
       <Space>
         <Button
@@ -39,7 +37,7 @@ const DisplayComponent = () => {
         </Button>
         <Button key="cancel">取消配货</Button>
       </Space>
-    </PageContainer>
+    </Fragment>
   );
 };
 
