@@ -1,33 +1,12 @@
-import React from 'react';
-import route from '../../config/routes';
 import {
   SmileOutlined,
   FormOutlined,
   AppstoreOutlined,
 } from '@ant-design/icons';
+import React from 'react';
+
 // 基础路由
 const basicRoutesMap = {
-  path: '/user',
-  layout: false, //TODO ?
-  routes: [
-    {
-      path: '/user',
-      routes: [
-        {
-          name: 'login',
-          path: '/user/login',
-          component: './User/Login',
-        },
-      ],
-    },
-    {
-      component: './404',
-    },
-  ],
-};
-
-// TODO 从服务端获取路由列表 动态路由
-const asyncRouterMap = {
   path: '/',
   routes: [
     {
@@ -40,7 +19,7 @@ const asyncRouterMap = {
       path: '/components',
       name: '业务组件展示',
       icon: <AppstoreOutlined />,
-      routes: [
+      children: [
         {
           path: '/components/simple-form',
           name: '表单查询',
@@ -54,6 +33,33 @@ const asyncRouterMap = {
   ],
 };
 
-export default {
-  route: asyncRouterMap,
-};
+// 动态路由
+const asyncRouterMap = [
+  {
+    path: '/',
+    redirect: '/home',
+  },
+  {
+    path: '/home',
+    name: '首页',
+    icon: <SmileOutlined />,
+    component: './Home',
+  },
+  {
+    path: '/components',
+    name: '业务组件展示',
+    icon: <AppstoreOutlined />,
+    children: [
+      {
+        path: '/components/simple-form',
+        name: '表单查询',
+        component: './DisplayComponent/SimpleForm',
+      },
+    ],
+  },
+  {
+    component: './404',
+  },
+];
+
+export { asyncRouterMap, basicRoutesMap };

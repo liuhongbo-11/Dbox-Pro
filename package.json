@@ -21,8 +21,10 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@ant-design/pro-form": "^1.43.5",
     "@ant-design/pro-layout": "^6.26.6",
     "antd": "4.14.0",
+    "axios": "^0.23.0",
     "classnames": "^2.3.1",
     "qs": "^6.10.1",
     "react": "17.x",

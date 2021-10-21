@@ -10,7 +10,6 @@ const Settings = {
   colorWeak: false,
   title: 'DBox Pro',
   pwa: false,
-  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   iconfontUrl: '',
 };
 export default Settings;
