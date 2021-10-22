@@ -17,6 +17,7 @@ import {
 
 import logo from '@/assets/logo.png';
 import { history, useModel } from 'umi';
+import { loginService } from '@/services/user';
 import styles from './index.less';
 
 const Login = () => {
@@ -25,7 +26,15 @@ const Login = () => {
 
   const fetchUserInfo = () => {};
 
-  const handleSubmit = () => {};
+  const handleSubmit = (values) => {
+    loginService(values)
+      .then(({ data }) => {
+        // TODO 暂定把登录信息存在本地缓存
+        localStorage.setItem('user', JSON.stringify(data));
+        history.push('/home');
+      })
+      .catch((err) => message.error(err.message));
+  };
 
   return (
     <div className={styles.container}>

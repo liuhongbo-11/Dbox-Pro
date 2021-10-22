@@ -4,7 +4,7 @@ import moment from 'moment';
 // 调用服务端数据
 const service = new Promise((resolve) => {
   setTimeout(() => {
-    console.log('fetch');
+    // console.log('fetch');
     return resolve([
       {
         key: 0,

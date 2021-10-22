@@ -63,7 +63,6 @@ const Layout = ({ location, children }) => {
    * menu={asyncRouterMap}
    * */
 
-  console.log('layout');
   return (
     <ProLayout
       logo={logo}

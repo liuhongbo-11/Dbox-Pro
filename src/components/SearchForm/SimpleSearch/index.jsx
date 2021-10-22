@@ -15,41 +15,48 @@ const Simple = ({ fields, formRef, ...props }) => {
   // 提交表单之前处理field
   const beforeSubmit = (field) => {
     const formFields = form.getFieldsValue(field);
-    console.log('formFields', formFields);
+    // console.log('formFields', formFields);
 
     // 针对表单字段处理
-    return fields.reduce((data, { component, field, props, fieldType = 'string' }) => {
-      let val = formFields[field];
-      let valType = isTypeOf(val);
+    return fields.reduce(
+      (data, { component, field, props, fieldType = 'string' }) => {
+        let val = formFields[field];
+        let valType = isTypeOf(val);
 
-      // 过滤空值
-      if (val === '' || valType === 'undefined' || (valType === 'array' && !val.length)) {
+        // 过滤空值
+        if (
+          val === '' ||
+          valType === 'undefined' ||
+          (valType === 'array' && !val.length)
+        ) {
+          return data;
+        }
+
+        // 去首尾空格
+        if (valType === 'string') {
+          val = val.trim();
+        }
+        // 多选模式下切割成数组 规则:(空格|英文逗号)
+        if (component === 'Input' && props && props.mode === 'multiple') {
+          val = val.split(regExp.division);
+        }
+
+        // val为数组统一用英文逗号进行分割
+        if (valType === 'array' && /string/gi.test(fieldType)) {
+          val = val.join(',');
+        }
+
+        // date format
+        if (['RangePicker', 'DatePicker', 'TimePicker'].includes(component)) {
+          val = moment(val).format(props.format);
+        }
+
+        data[field] = val;
+
         return data;
-      }
-
-      // 去首尾空格
-      if (valType === 'string') {
-        val = val.trim();
-      }
-      // 多选模式下切割成数组 规则:(空格|英文逗号)
-      if (component === 'Input' && props && props.mode === 'multiple') {
-        val = val.split(regExp.division);
-      }
-
-      // val为数组统一用英文逗号进行分割
-      if (valType === 'array' && /string/gi.test(fieldType)) {
-        val = val.join(',');
-      }
-
-      // date format
-      if (['RangePicker', 'DatePicker', 'TimePicker'].includes(component)) {
-        val = moment(val).format(props.format);
-      }
-
-      data[field] = val;
-
-      return data;
-    }, {});
+      },
+      {},
+    );
   };
 
   const submit = (field) => {
@@ -72,7 +79,12 @@ const Simple = ({ fields, formRef, ...props }) => {
   return (
     <Form form={form} name="simpleForm" {...props}>
       {fields.map((item) => (
-        <Form.Item label={item.label} name={item.field} key={item.field} {...item}>
+        <Form.Item
+          label={item.label}
+          name={item.field}
+          key={item.field}
+          {...item}
+        >
           <Field conf={item} />
         </Form.Item>
       ))}

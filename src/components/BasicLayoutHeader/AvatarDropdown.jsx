@@ -34,6 +34,9 @@ const logout = async () => {
 const AvatarDropdown = () => {
   // TODO 获取个人信息
   const { initialState, setInitialState } = useModel('@@initialState');
+
+  const userInfo = localStorage.getItem('user');
+  console.log('userInfo', userInfo);
   const onMenuClick = useCallback(
     (event) => {
       const { key } = event;
