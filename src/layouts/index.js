@@ -1,13 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
+import { Button } from 'antd';
 import { history } from 'umi';
 
 import LoginLayout from './LoginLayout';
 import HeaderRightContent from '@/components/BasicLayoutHeader';
+// import { asyncRouterMap, constantRouterMap } from '@/router/module';
 
 import __settings from './defaultSettings';
-import { asyncRouterMap, basicRoutesMap } from './menu';
-import { Button } from 'antd';
+import { generatorDynamicRouter } from '@/router/generator-routers';
+
+import styles from './index.less';
 import logo from '@/assets/logo.png';
 
 const waitTime = (time = 100) => {
@@ -21,6 +24,7 @@ const Layout = ({ location, children }) => {
   const [pathname, setPathname] = useState('/');
   const [asyncMenu, setAsyncMenu] = useState([]);
   const actionRef = useRef();
+
   // 自定义菜单项的方法
   const menuItemRender = (item, dom) => {
     return (
@@ -70,8 +74,16 @@ const Layout = ({ location, children }) => {
       menu={{
         // loading: true,
         request: async () => {
-          await waitTime(2000);
-          return asyncRouterMap;
+          // await waitTime(2000);
+          // console.log('waitTime');
+          // // generatorDynamicRouter().then(({ routers }) => {
+          // // });
+          // const { routers } = await generatorDynamicRouter();
+          // console.log('routers', routers);
+          // return [];
+          // const router = [...asyncRouterMap, ...constantRouterMap];
+          // console.log('asyncRouterMap.routes', router);
+          // return router;
         },
       }}
       actionRef={actionRef}
@@ -79,9 +91,15 @@ const Layout = ({ location, children }) => {
       menuItemRender={menuItemRender}
       rightContentRender={() => <HeaderRightContent />}
     >
-      <PageContainer content={children}>
-        <Button onClick={refreshMenu}>刷新菜单</Button>
-      </PageContainer>
+      {/*页容器 配置面包屑或者标题*/}
+      {/*https://procomponents.ant.design/components/page-container*/}
+      <PageContainer> </PageContainer>
+
+      {/*内容*/}
+      <div className={styles.page}>
+        {children}
+        {/*<Button onClick={refreshMenu}>刷新菜单</Button>*/}
+      </div>
     </ProLayout>
   );
 };

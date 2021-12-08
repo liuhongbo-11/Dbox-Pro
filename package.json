@@ -25,6 +25,7 @@
     "@ant-design/pro-layout": "^6.26.6",
     "antd": "4.14.0",
     "axios": "^0.23.0",
+    "caniuse-lite": "^1.0.30001285",
     "classnames": "^2.3.1",
     "qs": "^6.10.1",
     "react": "17.x",

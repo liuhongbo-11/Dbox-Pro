@@ -1,4 +1,4 @@
-import request from '@/utils/request';
+import request from '@/services/request';
 
 /**
  * ==== 登录 ====
@@ -23,9 +23,20 @@ export const permissionAuth = (payload) =>
   });
 
 // 退出登录
-// export async function outLogin(options) {
-//   return request('/api/login/outLogin', {
-//     method: 'POST',
-//     ...(options || {}),
-//   });
-// }
+export async function outLogin(options) {
+  return request('/api/login/outLogin', {
+    method: 'POST',
+    ...(options || {}),
+  });
+}
+
+/**
+ * ==== 获取菜单 ====
+ * @param {*} payload
+ */
+
+export const getMenuList = () =>
+  request({
+    url: '/api/getUserMenuFuncList',
+    method: 'GET',
+  });

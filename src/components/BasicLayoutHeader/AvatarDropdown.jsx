@@ -10,7 +10,7 @@ import {
 
 import HeaderDropdown from '../HeaderDropdown';
 
-import { outLogin } from '@/services/user';
+import { outLogin } from '@/api/user';
 import styles from './index.less';
 
 // 退出登录

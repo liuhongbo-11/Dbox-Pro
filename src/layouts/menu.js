@@ -49,11 +49,24 @@ const asyncRouterMap = [
     path: '/components',
     name: '业务组件展示',
     icon: <AppstoreOutlined />,
-    children: [
+    routes: [
       {
         path: '/components/simple-form',
         name: '表单查询',
         component: './DisplayComponent/SimpleForm',
+      },
+    ],
+  },
+  {
+    meta: { title: '基础设置', icon: 'tool' },
+    name: '基础设置',
+    path: '/basics',
+    routes: [
+      {
+        path: '/basics/warehouse',
+        component: './basics/warehouse',
+        meta: { title: '仓库管理', icon: undefined },
+        name: '仓库管理',
       },
     ],
   },

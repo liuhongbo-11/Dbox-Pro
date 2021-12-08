@@ -17,9 +17,10 @@ import {
 
 import logo from '@/assets/logo.png';
 import { history, useModel } from 'umi';
-import { loginService } from '@/services/user';
+import { loginService } from '@/api/user';
 import styles from './index.less';
 
+// 登录
 const Login = () => {
   const [userLoginState, setUserLoginState] = useState({});
   const [type, setType] = useState('account');
@@ -118,23 +119,26 @@ const Login = () => {
                 // }}
               />
             </Tabs.TabPane>
+            {/*<Tabs.TabPane key="QR" tab="扫码登录"></Tabs.TabPane>*/}
           </Tabs>
-          <div
-            style={{
-              marginBottom: 24,
-            }}
-          >
-            <ProFormCheckbox noStyle name="autoLogin">
-              自动登录
-            </ProFormCheckbox>
-            <a
+          {type !== 'QR' && (
+            <div
               style={{
-                float: 'right',
+                marginBottom: 24,
               }}
             >
-              忘记密码
-            </a>
-          </div>
+              <ProFormCheckbox noStyle name="autoLogin">
+                自动登录
+              </ProFormCheckbox>
+              <a
+                style={{
+                  float: 'right',
+                }}
+              >
+                忘记密码
+              </a>
+            </div>
+          )}
         </LoginForm>
       </div>
     </div>
