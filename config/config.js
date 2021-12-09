@@ -10,6 +10,7 @@ export default defineConfig({
   alias: {
     '@': './src',
   },
+  // plugins: [['umi-plugin-react'], { dynamicImport: true }],
   // layout: {
   //   name: 'Ant Design',
   //   ...Settings,

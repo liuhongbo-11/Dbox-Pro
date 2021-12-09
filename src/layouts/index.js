@@ -2,16 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
 import { Button } from 'antd';
 import { history } from 'umi';
+import { SmileOutlined, HeartOutlined } from '@ant-design/icons';
+import * as icon from '@ant-design/icons';
 
 import LoginLayout from './LoginLayout';
 import HeaderRightContent from '@/components/BasicLayoutHeader';
-// import { asyncRouterMap, constantRouterMap } from '@/router/module';
+import routerConf from '../../config/routes';
 
 import __settings from './defaultSettings';
 import { generatorDynamicRouter } from '@/router/generator-routers';
 
 import styles from './index.less';
 import logo from '@/assets/logo.png';
+
+import formatterIconMap from '@/utils/iconMap';
 
 const waitTime = (time = 100) => {
   return new Promise((resolve) => {
@@ -20,24 +24,34 @@ const waitTime = (time = 100) => {
     }, time);
   });
 };
+
 const Layout = ({ location, children }) => {
   const [pathname, setPathname] = useState('/');
   const [asyncMenu, setAsyncMenu] = useState([]);
   const actionRef = useRef();
 
   // 自定义菜单项的方法
-  const menuItemRender = (item, dom) => {
+  const menuItemRender = ({ path, meta, ...item }, dom) => {
     return (
       <a
         onClick={() => {
-          history.push(item.path);
-          setPathname(item.path || '/home');
+          history.push(path);
+          setPathname(path || '/home');
         }}
       >
+        {meta.icon && formatterIconMap()[meta.icon]}
         {dom}
       </a>
     );
   };
+
+  // 自定义拥有子菜单菜单项的 render 方法
+  const subMenuItemRender = ({ meta }, dom) => (
+    <>
+      {meta.icon && formatterIconMap()[meta.icon]}
+      {dom}
+    </>
+  );
 
   // 顶部导航栏渲染方法
   const headerRender = (props) => {};
@@ -74,21 +88,22 @@ const Layout = ({ location, children }) => {
       menu={{
         // loading: true,
         request: async () => {
-          // await waitTime(2000);
-          // console.log('waitTime');
-          // // generatorDynamicRouter().then(({ routers }) => {
-          // // });
+          await waitTime(500);
+          // 动态获取菜单
           // const { routers } = await generatorDynamicRouter();
-          // console.log('routers', routers);
-          // return [];
-          // const router = [...asyncRouterMap, ...constantRouterMap];
-          // console.log('asyncRouterMap.routes', router);
-          // return router;
+          // return routers;
+
+          //静态路由从 config/routes.js 中获取
+          const [constantRouterMap, asyncRouterMap] = routerConf;
+          // let result = loopMenuItem(asyncRouterMap.routes);
+          // return result;
+          return asyncRouterMap.routes;
         },
       }}
       actionRef={actionRef}
       location={{ pathname }}
       menuItemRender={menuItemRender}
+      subMenuItemRender={subMenuItemRender}
       rightContentRender={() => <HeaderRightContent />}
     >
       {/*页容器 配置面包屑或者标题*/}

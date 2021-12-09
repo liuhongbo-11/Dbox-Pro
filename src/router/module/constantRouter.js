@@ -1,5 +1,7 @@
-import UserLayout from '@/layouts/LoginLayout';
-import LoginLayout from '../../layouts/LoginLayout';
+// import UserLayout from '@/layouts/LoginLayout';
+// import LoginLayout from '../../layouts/LoginLayout';
+
+import UserLayout from '../../layouts/LoginLayout';
 
 // 静态路由
 const constantRouter = [

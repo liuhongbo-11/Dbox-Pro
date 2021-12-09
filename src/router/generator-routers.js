@@ -1,61 +1,10 @@
 import menu from './menu';
 import { getMenuList } from '@/api/user';
 import BasicLayout from '@/layouts/index';
+import { asyncRouterMap } from './module';
+import Routers from '../../config/routes';
 
-const home = {
-  exact: false,
-  path: '/',
-  component: '@/layouts/index',
-  routes: [
-    {
-      exact: true,
-      path: '/home',
-      component: './Home',
-    },
-  ],
-};
-// url -> 驼峰 key
-const getKey = (path = '') => {
-  return path.replace(/\/\w{1}/gi, (s) => {
-    return s[1].toUpperCase();
-  });
-};
-/**
- * == 路由包装（添加key&permission） ==
- * @param {*} routes  路由数组
- * @param {*} prefix  父级url
- * @returns {*} Array<Object> 包装后的路由列表
- */
-export const routerWrap = (routes, prefix = '/') => {
-  return routes.map((r) => {
-    // meta必须要有（生成菜单用）
-    if (!r.meta) r.meta = {};
-    const { routes = [], meta } = r;
-    // 如果不以斜杆开头&&非http(s)开头则根据父级path拼接
-    if (!/^(\/|http(s)?:\/\/)/.test(r.path)) r.path = prefix + '/' + r.path;
-    if (!r.key) r.key = getKey(r.path); // 添加key
-    if (!r.name) r.name = r.key;
-    meta.permission = [r.key]; // 添加permission
-    if (routes.length > 0) {
-      r.routes = routerWrap(routes, r.path);
-      // 当有子路由时默认导航到第一个子路由
-      if (!r.redirect) r.redirect = r.routes[0].path;
-    }
-    return r;
-  });
-};
-
-const asyncRouterMap = routerWrap([
-  {
-    path: '/',
-    key: 'root',
-    name: 'root',
-    component: BasicLayout,
-    meta: { title: '首页' },
-    redirect: '/home',
-    routes: [home],
-  },
-]);
+console.log('generator rourters', Routers);
 
 // 首页路由
 const homeRouter = {
@@ -65,20 +14,6 @@ const homeRouter = {
   parentId: 1000,
   icon: 'home',
 };
-
-// 根级菜单
-const rootRouter = {
-  // key: 'root',
-  // name: 'index',
-  path: '/',
-  component: 'BasicLayout',
-  // redirect: '/home',
-  // meta: {
-  //   title: '首页',
-  // },
-  routes: [],
-};
-// const rootRouter = [];
 
 // 获取异步路由配置
 const getRouterConf = (routers, [rConf = {}, rComp = {}] = []) => {
@@ -115,13 +50,16 @@ const constantRouterComponents = {
  * @returns {*}
  */
 export const generator = (routerMap, parent) => {
-  return routerMap.map((item) => {
+  return routerMap.map((item, index) => {
     const { [item.key]: rConf = {} } = asyncConf;
     const { meta = {}, ...defRouterConf } = rConf;
     const { title, show, hideChildren, icon } = item.meta || {};
 
-    console.log(' path', defRouterConf);
-    // let component =  item.
+    // 组件地址 文件目录地址需与路由地址一致
+    let componentUrl =
+      item.path || rConf.path || `${(parent && parent.path) || ''}/${item.key}`;
+
+    // 设置当前router数据
     const currentRouter = {
       ...defRouterConf,
       name: title,
@@ -139,10 +77,7 @@ export const generator = (routerMap, parent) => {
       //   constantRouterComponents[item.component || item.key] ||
       //   (() => import(`@/pages/${item.component}`)),
 
-      component:
-        `@/pages${item.path}` ||
-        `@/pages/${rConf.path}` ||
-        `@/pages/${(parent && parent.path) || ''}/${item.key}`,
+      component: `@/pages${componentUrl}`,
       // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
       meta: {
         ...meta,
@@ -183,28 +118,24 @@ export const generator = (routerMap, parent) => {
  * @param token
  * @returns {Promise<Router>}
  */
-
 export const generatorDynamicRouter = () => {
   return new Promise((resolve, reject) => {
     getMenuList()
       .then(({ data }) => {
-        const list = data || [];
+        let list = data || [];
         const parentId = 1000;
         const routesNav = [];
 
         // 添加首页路由
-        list.push(homeRouter);
+        list.unshift(homeRouter);
 
         // 后端数据, 根级树数组,  根级 PID
         listToTree(list, routesNav, parentId);
 
         // 路由挂载
-        rootRouter.routes = routesNav;
+        const routers = generator(routesNav);
 
-        console.log('rootRouter', rootRouter, '=====' + routesNav);
-
-        const routers = generator([routesNav]);
-
+        console.log('generatorDynamicRouter', routers);
         resolve({
           routers,
         });
@@ -243,7 +174,6 @@ const listToTree = (list, tree, parentId) => {
       // 删除不存在routes 值的属性
       if (!child.routes.length) {
         delete child.routes;
-        delete child.component;
       }
 
       // 加入到树中

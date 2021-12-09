@@ -1,4 +1,5 @@
-import BlankLayout from '@/layouts/BlankLayout';
+// import BlankLayout from '@/layouts/BlankLayout';
+import BlankLayout from '../../layouts/BlankLayout';
 
 // 二级子菜单
 const routes = [

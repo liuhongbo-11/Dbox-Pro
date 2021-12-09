@@ -36,7 +36,7 @@ const AvatarDropdown = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const userInfo = localStorage.getItem('user');
-  console.log('userInfo', userInfo);
+  // console.log('userInfo', userInfo);
   const onMenuClick = useCallback(
     (event) => {
       const { key } = event;
